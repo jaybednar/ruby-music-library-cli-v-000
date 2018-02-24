@@ -1,13 +1,17 @@
 class MusicLibraryController
-	attr_accessor :path
+	attr_accessor :path 
 
 	def initialize(path = './db/mp3s')
 	  MusicImporter.new(path).import
-	end
+	end 
 
-	def call
+	def call 
 
-	  puts "Welcome to your music library!"
+    input = ""
+
+    while input != 'exit'
+
+	    puts "Welcome to your music library!"
       puts "To list all of your songs, enter 'list songs'."
       puts "To list all of the artists in your library, enter 'list artists'."
       puts "To list all of the genres in your library, enter 'list genres'."
@@ -18,80 +22,78 @@ class MusicLibraryController
       puts "What would you like to do?"
 
 
-      input = gets.chomp
+      input = gets.strip
 
-      if input == 'list songs'
-      	self.list_songs
-      elsif input == 'list artists'
-      	list_artists
-      elsif input == 'list genres'
-      	list_genres
-      elsif input == 'list artist'
-      	list_songs_by_artist
-      elsif input == 'list genre'
-      	list_songs_by_genre
-      elsif input == 'play song'
-      	play_song
-      elsif input == 'exit'
-      	return "Goodbye!"
-      else
-      	self.call
-      end
+      case input 
+        when 'list songs'
+      	  list_songs
+        when 'list artists'
+      	  list_artists
+        when 'list genres'
+      	  list_genres
+        when 'list artist'
+      	  list_songs_by_artist
+        when 'list genre'
+      	  list_songs_by_genre
+        when 'play song'
+      	  play_song
+      end 
+   end 
 
-    end
+  end 
 
 
-    def list_songs
-    	Song.all.sort{|song_x, song_y| song_x.name <=> song_y.name}.each_with_index do |song, i|
+    def list_songs 
+    	Song.all.sort{|song_x, song_y| song_x.name <=> song_y.name}.each_with_index do |song, i| 
     		puts "#{i + 1}. #{song.artist.name} - #{song.name} - #{song.genre.name}"
-    	end
-    end
+    	end 
+    end 
 
-    def list_artists
-    	Artist.all.sort{|artist_x, artist_y| artist_x.name <=> artist_y.name}.each_with_index do |artist, i|
+    def list_artists 
+    	Artist.all.sort{|artist_x, artist_y| artist_x.name <=> artist_y.name}.each_with_index do |artist, i| 
     		puts "#{i + 1}. #{artist.name}"
-    	end
-    end
+    	end 
+    end 
 
      def list_genres
-    	Genre.all.sort{|genre_x, genre_y| genre_x.name <=> genre_y.name}.each_with_index do |genre, i|
+    	Genre.all.sort{|genre_x, genre_y| genre_x.name <=> genre_y.name}.each_with_index do |genre, i| 
     		puts "#{i + 1}. #{genre.name}"
-    	end
-    end
+    	end 
+    end 
 
     def list_songs_by_artist
     	puts "Please enter the name of an artist:"
 
-    	artist_name = gets.chomp
+    	artist_name = gets.strip
     	if Artist.find_by_name(artist_name)
-    		Artist.find_by_name(artist_name).songs.sort{|song_x, song_y| song_x.name <=> song_y.name}.each_with_index do |song, i|
+    		Artist.find_by_name(artist_name).songs.sort{|song_x, song_y| song_x.name <=> song_y.name}.each_with_index do |song, i| 
     			puts "#{i + 1}. #{song.name} - #{song.genre.name}"
-    		end
-    	else
-    	end
-	end
+    		end 
+    	else 
+    	end 
+	end 
 
 	def list_songs_by_genre
     	puts "Please enter the name of a genre:"
 
-    	genre_name = gets.chomp
+    	genre_name = gets.chomp 
     	if Genre.find_by_name(genre_name)
-    		Genre.find_by_name(genre_name).songs.sort{|song_x, song_y| song_x.name <=> song_y.name}.each_with_index do |song, i|
+    		Genre.find_by_name(genre_name).songs.sort{|song_x, song_y| song_x.name <=> song_y.name}.each_with_index do |song, i| 
     			puts "#{i + 1}. #{song.artist.name} - #{song.name}"
-    		end
-    	else
-    	end
-	end
+    		end 
+    	else 
+    	end 
+	end 
 
-	def play_song
+	def play_song 
 		puts "Which song number would you like to play?"
 
-		song_num = gets.chomp.to_i
+		song_num = gets.strip.to_i
 
-		if song_num > 0 && song_num <= Song.all.length
+		if song_num > 0 && song_num <= Song.all.length 
 			song = Song.all.sort{|song_x, song_y| song_x.name <=> song_y.name}[song_num - 1]
 			puts "Playing #{song.name} by #{song.artist.name}"
-		else
-		end
-	end
+		else 
+		end 
+	end 
 end 
